@@ -1,0 +1,5 @@
+https://pokeapi.co/api/v2/encounter-method/1/
+https://pokeapi.co/api/v2/encounter-method/2/
+https://pokeapi.co/api/v2/encounter-method/3/
+https://pokeapi.co/api/v2/encounter-method/4/
+https://pokeapi.co/api/v2/encounter-method/5/
