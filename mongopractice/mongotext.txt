@@ -1,0 +1,170 @@
+Microsoft Windows [Version 10.0.19043.1110]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Program Files\MongoDB\Server\5.0\bin>mongo.exe
+MongoDB shell version v5.0.1
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("7f18a488-6cf6-4c2c-b6d7-55c639afd12d") }
+MongoDB server version: 5.0.1
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+We recommend you begin using "mongosh".
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2021-07-28T09:52:08.686+03:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> use my_first_db
+switched to db my_first_db
+> db.createCollection("students")
+{
+        "ok" : 0,
+        "errmsg" : "Collection already exists. NS: my_first_db.students",
+        "code" : 48,
+        "codeName" : "NamespaceExists"
+}
+> db.students.insert(name: "Frodo", home_state: "York", luck_number:5, birthday:{month: 3, day: 22, year: 1995})
+uncaught exception: SyntaxError: missing ) after argument list :
+@(shell):1:23
+> db.students.insert({name:"John Doe",home_state:"Florida",favourite_number:4,birthday:{month:5,day:5,year:2005}})
+WriteResult({ "nInserted" : 1 })
+> db.students.insert({name:"Mohammed Hammouz",home_state:"Nablus",favourite_number:4,birthday:{month:9,day:5,year:1995}})
+WriteResult({ "nInserted" : 1 })
+> db.students.insert({name:"Abeer Hammouz",home_state:"Nablus",favourite_number:7,birthday:{month:5,day:12,year:1989}})
+WriteResult({ "nInserted" : 1 })
+> db.students.insert({name:"Abeer Hammouz",home_state:"Nablus",favourite_number:7,birthday:{month:5,day:12,year:1989}})
+WriteResult({ "nInserted" : 1 })
+> db.students.insert({name:"Afaf Hammouz",home_state:"Nablus",favourite_number:22,birthday:{month:10,day:31,year:1958}})
+WriteResult({ "nInserted" : 1 })
+> db.students.find().pretty()
+{
+        "_id" : ObjectId("61013e9aec6ec11160cdc75e"),
+        "name" : "John Doe",
+        "home_state" : "Florida",
+        "favourite_number" : 4,
+        "birthday" : {
+                "month" : 5,
+                "day" : 5,
+                "year" : 2005
+        }
+}
+{
+        "_id" : ObjectId("61013ee2ec6ec11160cdc75f"),
+        "name" : "Mohammed Hammouz",
+        "home_state" : "Nablus",
+        "favourite_number" : 4,
+        "birthday" : {
+                "month" : 9,
+                "day" : 5,
+                "year" : 1995
+        }
+}
+{
+        "_id" : ObjectId("61013f12ec6ec11160cdc760"),
+        "name" : "Abeer Hammouz",
+        "home_state" : "Nablus",
+        "favourite_number" : 7,
+        "birthday" : {
+                "month" : 5,
+                "day" : 12,
+                "year" : 1989
+        }
+}
+{
+        "_id" : ObjectId("61013f3bec6ec11160cdc761"),
+        "name" : "Abeer Hammouz",
+        "home_state" : "Nablus",
+        "favourite_number" : 7,
+        "birthday" : {
+                "month" : 5,
+                "day" : 12,
+                "year" : 1989
+        }
+}
+{
+        "_id" : ObjectId("61013f60ec6ec11160cdc762"),
+        "name" : "Afaf Hammouz",
+        "home_state" : "Nablus",
+        "favourite_number" : 22,
+        "birthday" : {
+                "month" : 10,
+                "day" : 31,
+                "year" : 1958
+        }
+}
+> db.students.find($or:[{home_state:"Nablus"},{home_state:"Ramallah"}])
+uncaught exception: SyntaxError: missing ) after argument list :
+@(shell):1:20
+> db.students.find({$or:[{home_state:"Nablus"},{home_state:"Ramallah"}])
+...
+...
+>
+>
+> db.students.find({$or:[{home_state:"Nablus"},{home_state:"Ramallah"}]})
+{ "_id" : ObjectId("61013ee2ec6ec11160cdc75f"), "name" : "Mohammed Hammouz", "home_state" : "Nablus", "favourite_number" : 4, "birthday" : { "month" : 9, "day" : 5, "year" : 1995 } }
+{ "_id" : ObjectId("61013f12ec6ec11160cdc760"), "name" : "Abeer Hammouz", "home_state" : "Nablus", "favourite_number" : 7, "birthday" : { "month" : 5, "day" : 12, "year" : 1989 } }
+{ "_id" : ObjectId("61013f3bec6ec11160cdc761"), "name" : "Abeer Hammouz", "home_state" : "Nablus", "favourite_number" : 7, "birthday" : { "month" : 5, "day" : 12, "year" : 1989 } }
+{ "_id" : ObjectId("61013f60ec6ec11160cdc762"), "name" : "Afaf Hammouz", "home_state" : "Nablus", "favourite_number" : 22, "birthday" : { "month" : 10, "day" : 31, "year" : 1958 } }
+> db.students.find({favourite_number:{$gt:3}})
+{ "_id" : ObjectId("61013e9aec6ec11160cdc75e"), "name" : "John Doe", "home_state" : "Florida", "favourite_number" : 4, "birthday" : { "month" : 5, "day" : 5, "year" : 2005 } }
+{ "_id" : ObjectId("61013ee2ec6ec11160cdc75f"), "name" : "Mohammed Hammouz", "home_state" : "Nablus", "favourite_number" : 4, "birthday" : { "month" : 9, "day" : 5, "year" : 1995 } }
+{ "_id" : ObjectId("61013f12ec6ec11160cdc760"), "name" : "Abeer Hammouz", "home_state" : "Nablus", "favourite_number" : 7, "birthday" : { "month" : 5, "day" : 12, "year" : 1989 } }
+{ "_id" : ObjectId("61013f3bec6ec11160cdc761"), "name" : "Abeer Hammouz", "home_state" : "Nablus", "favourite_number" : 7, "birthday" : { "month" : 5, "day" : 12, "year" : 1989 } }
+{ "_id" : ObjectId("61013f60ec6ec11160cdc762"), "name" : "Afaf Hammouz", "home_state" : "Nablus", "favourite_number" : 22, "birthday" : { "month" : 10, "day" : 31, "year" : 1958 } }
+> db.students.find({favourite_number:{$lte:10}})
+{ "_id" : ObjectId("61013e9aec6ec11160cdc75e"), "name" : "John Doe", "home_state" : "Florida", "favourite_number" : 4, "birthday" : { "month" : 5, "day" : 5, "year" : 2005 } }
+{ "_id" : ObjectId("61013ee2ec6ec11160cdc75f"), "name" : "Mohammed Hammouz", "home_state" : "Nablus", "favourite_number" : 4, "birthday" : { "month" : 9, "day" : 5, "year" : 1995 } }
+{ "_id" : ObjectId("61013f12ec6ec11160cdc760"), "name" : "Abeer Hammouz", "home_state" : "Nablus", "favourite_number" : 7, "birthday" : { "month" : 5, "day" : 12, "year" : 1989 } }
+{ "_id" : ObjectId("61013f3bec6ec11160cdc761"), "name" : "Abeer Hammouz", "home_state" : "Nablus", "favourite_number" : 7, "birthday" : { "month" : 5, "day" : 12, "year" : 1989 } }
+> db.students.find({$and:[{favourite_number:{$gte:1}},{favourite_number:{$lte:9}}]})
+{ "_id" : ObjectId("61013e9aec6ec11160cdc75e"), "name" : "John Doe", "home_state" : "Florida", "favourite_number" : 4, "birthday" : { "month" : 5, "day" : 5, "year" : 2005 } }
+{ "_id" : ObjectId("61013ee2ec6ec11160cdc75f"), "name" : "Mohammed Hammouz", "home_state" : "Nablus", "favourite_number" : 4, "birthday" : { "month" : 9, "day" : 5, "year" : 1995 } }
+{ "_id" : ObjectId("61013f12ec6ec11160cdc760"), "name" : "Abeer Hammouz", "home_state" : "Nablus", "favourite_number" : 7, "birthday" : { "month" : 5, "day" : 12, "year" : 1989 } }
+{ "_id" : ObjectId("61013f3bec6ec11160cdc761"), "name" : "Abeer Hammouz", "home_state" : "Nablus", "favourite_number" : 7, "birthday" : { "month" : 5, "day" : 12, "year" : 1989 } }
+> db.students.update({},{$set:{interests:["coding","brunch","MongoDB"]}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.students.update({},{$set:{interests:["coding","brunch","MongoDB"]}},false,true)
+WriteResult({ "nMatched" : 5, "nUpserted" : 0, "nModified" : 4 })
+> db.students.update({"_id" : ObjectId("60ff1b1847e7778e2b06b4f4")},{$push:{interests:"php"}})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+> db.students.update({"_id" : ObjectId("60ff1b1847e7778e2b06b4f8")},{$push:{interests:"taxes"}})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+> db.students.remove({"_id" : ObjectId("60ff1b1847e7778e2b06b4f8")},{$pop:{interests:"taxes"}})
+WriteResult({ "nRemoved" : 0 })
+> db.students.remove({interests:"taxes"})
+WriteResult({ "nRemoved" : 0 })
+> db.students.remove({home_state:"california"})
+WriteResult({ "nRemoved" : 0 })
+> db.students.remove({name:"Mohammed Hammouz"})
+WriteResult({ "nRemoved" : 1 })
+> db.ninjas.remove({favourite_number: "yellow"}, false)
+WriteResult({ "nRemoved" : 0 })
+> db.ninjas.remove({favourite_number: "$gt:5"}, true)
+WriteResult({ "nRemoved" : 0 })
+> db.ninjas.update({}, {$set: {number_of_belts: 0}})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+> db.students.update({home_state:"Alaska"},{$inc:{number_of_belts:1}})
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+> db.students.update({},{$rename:{"number_of_belts":"belts_earned"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 0 })
+> db.students.update({},{$rename:{"number_of_belts":"belts_earned"}},false,true)
+WriteResult({ "nMatched" : 4, "nUpserted" : 0, "nModified" : 0 })
+> db.students.update({},{$unset:{favourite_number:""}},false,true)
+WriteResult({ "nMatched" : 4, "nUpserted" : 0, "nModified" : 4 })
+> db.students.update({},{$currentDate:{"updated_on":{$type:"date"}}},false,true)
+WriteResult({ "nMatched" : 4, "nUpserted" : 0, "nModified" : 4 })
