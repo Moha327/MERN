@@ -13,7 +13,7 @@ const ProductForm=(props)=> {
         //prevent default behavior of the submit
         e.preventDefault();
         //make a post request to create a new person
-        axios.post('http://localhost:8000/api/products', {
+        axios.post('http://localhost:8000/api/createProduct', {
             title,
             price,
             description
