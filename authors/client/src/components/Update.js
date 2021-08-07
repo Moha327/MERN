@@ -1,36 +1,37 @@
-import React, { useEffect, useState } from 'react'
+import React, {useState, useEffect} from 'react';
+import AuthorForm from '../components/AuthorForm';
+import {Link, navigate} from '@reach/router';
 import axios from 'axios';
-const Update = props  => {
-    const { id } = props;
-    const [name, setName] = useState('');
+
+const Update= (props) => {
+    const {id} = props;
+    const [author, setAuthor] = useState();
+    const [loaded, setLoaded] = useState(false);
+
+    console.log(id);
     useEffect(() => {
-        axios.get('http://localhost:8000/api/updateauthors/' + props.id)
-            .then(res => {
-                setName(res.data.name);
-            })
-    }, [props.id])
-    const Update = e => {
-        e.preventDefault();
-        axios.put('http://localhost:8000/api/updateauthors/' + id, {
-            name
+        axios.get(`http://localhost:8000/api/updateauthors/${props.id}`)
+        .then(response => {
+            setAuthor(response.data)
+            setLoaded(true)
         })
-            .then(res => console.log(res));
+    },[props.id]);
+
+    const editAuthor = (updatedAuthor) => {
+        axios.put(`http://localhost:8000/api/updateauthors/${id}`, updatedAuthor)
+        .then(res => {
+            console.log(res);
+            navigate("/");
+        })
     }
-    return (
+
+    return(
         <div>
-            <h1>Update a Product</h1>
-            <form onSubmit={Update}>
-                <p>
-                    <label>Edit</label><br />
-                    <input type="String" 
-                    name="name" 
-                    value={name} 
-                    onChange={(e) => { setName(e.target.value) }} />
-                </p>
-                <input type="submit" />
-                
-            </form>
-            
+            <Link to="/">Home</Link>
+            <div>
+                <h4>Edit this Author</h4>
+                {loaded && <AuthorForm onSubmitProp={editAuthor} initialName={author.name}/>}
+            </div>
         </div>
     )
 }

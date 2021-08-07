@@ -4,9 +4,9 @@ import { Link } from '@reach/router';
 const deleteComp =(props)=> {
     const { removeFromDom } = props;
     const deleteAuthor = (authorId) => {
-        axios.delete('http://localhost:8000/api/authors/' + authorId)
+        axios.delete('http://localhost:8000/api/authors/' + props.id)
             .then(res => {
-                removeFromDom(authorId)
+                removeFromDom(props.id)
             })
     }
     return (
@@ -16,7 +16,7 @@ const deleteComp =(props)=> {
                     <Link to={"/" + author._id}>
                         {author.name}
                     |</Link>
-                    <button onClick={(e)=>{deleteAuthor(author._id)}}>
+                    <button onClick={(e)=>{deleteAuthor(props._id)}}>
                         Delete
                     </button>
                     

@@ -1,34 +1,26 @@
-import React, { useState } from 'react'
-import axios from 'axios';
+import React, {useState} from 'react';
+import {navigate} from '@reach/router';
 
 
-const AuthorForm=(props)=> {
-   
-              //keep track of what is being typed via useState hook
-    const [name, setName] = useState(""); 
-    //handler when the form is submitted
-    const onSubmitHandler = e => {
-        //prevent default behavior of the submit
+const AuthorForm = (props) => {
+    const {initialName, onSubmitProp} = props;
+    const [name, setName] = useState(initialName);
+
+    const onSubmitHandler = (e) => {
         e.preventDefault();
-        //make a post request to create a new person
-        axios.post('http://localhost:8000/api/authors', {
-            name
-        })
-            .then(res=>console.log(res))
-            .catch(err=>console.log(err))
+        onSubmitProp({name});
     }
-    //onChange to update firstName and lastName
     return (
-        <form onSubmit={onSubmitHandler}>
-            <p>
-                <label>Name</label><br/>
-                <input type="text" onChange={(e)=>setName(e.target.value)} value={name}/>
-            </p>
-            
-            <input type="submit"/>
-        </form>
-    ) 
-    
+        <div>
+            <form onSubmit={onSubmitHandler}>
+                <form>
+                    <label>Name</label>
+                    <input type="text" value={name} onChange={(e) => {setName(e.target.value)}}/>
+                </form>
+                <button type="submit">Submit</button>
+            </form>
+            <button onClick={()=> navigate("/")}>Cancel</button>
+        </div>
+    )
 }
-
 export default AuthorForm

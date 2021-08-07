@@ -1,38 +1,38 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+import AuthorForm from '../components/AuthorForm';
+import {Link, navigate} from '@reach/router';
 import axios from 'axios';
-export default function Main() {
-    const [name, setName] = useState("");
-   
-    //Create an array to store errors from the API
-    const [errors, setErrors] = useState([]); 
-    const onSubmitHandler = e => {
-        e.preventDefault();
-        //Send a post request to our API to create a Book
-        axios.post('http://localhost:8000/api/authors', {
-            name
+
+const AddAuthor =(props) => {
+    const [authors, setAuthors] = useState([]);
+    const [errors, setErrors] = useState([]);
+
+    const addNewAuthor = (newAuthor) => {
+        axios.post('http://localhost:8000/api/authors', newAuthor)
+        .then(response => {
+            setAuthors([
+                ...authors,
+                response.data
+                ]);
+            navigate("/");
+
         })
-            .then(res=>console.log(res)) // If successful, do something with the response. 
-            .catch(err=>{
-                const errorResponse = err.response.data.errors; // Get the errors from err.response.data
-                const errorArr = []; // Define a temp error array to push the messages in
-                for (const key of Object.keys(errorResponse)) { // Loop through all errors and get the messages
-                    errorArr.push(errorResponse[key].message)
-                }
-                // Set Errors    
-                setErrors(errorArr);    
-            })            
+        .catch(err => {
+            const errorResponse = err.response.data.errors;
+            const errorArr = [];
+            for (const key of Object.keys(errorResponse)) {
+                errorArr.push(errorResponse[key].message)
+            }
+            setErrors(errorArr);
+        })
     }
-    return (
+
+    return(
         <div>
-            <form onSubmit={onSubmitHandler}>
-                {errors.map((err, index) => <p key={index}>{err}</p>)}
-                <p>
-                    <label>Name</label>
-                    <input type="text" onChange={e => setName(e.target.value)} />
-                </p>
-                
-                <input type="submit" />
-            </form>
+            <Link to="/">Home</Link>
+            <h4>Add a new Author</h4>
+            <AuthorForm onSubmitProp={addNewAuthor} initialName={""} errors={errors} />
         </div>
     )
 }
+export default AddAuthor

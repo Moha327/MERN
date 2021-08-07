@@ -1,33 +1,37 @@
-import axios from 'axios'
-import { Link } from '@reach/router';
+import React, {useState} from 'react';
+import {navigate, Link} from '@reach/router';
 
 
+const AuthorList = (props) => {
+    const [authors, setAuthors] =useState([]);
 
-const AuthorList=(props)=> {
-    const { removeFromDom } = props;
-    const deleteAuthor = (authorId) => {
-        axios.delete('http://localhost:8000/api/authors/' + authorId)
-            .then(res => {
-                removeFromDom(authorId)
-            })
+    const removeFromDom = authorId => {
+        setAuthors(authors.filter(authors => authors._id !== authorId))
     }
-    return (
-        
-        <div>
-            
-            All Products:
-            {props.authors.map((author)=>{
-                return <p> < Link to = {"/authors/" + author._id} key={author._id}>{author.name}</Link> 
-                <button onClick={(e)=>{deleteAuthor(author._id)}}>
-                        Delete
-                    </button></p>   
 
-                
-            })}
-            
-         
+    return (
+        <div>
+            <table>
+                <tbody>
+                    <tr>
+                        <th><h1>Author</h1></th>
+                        <th><h1>Actions</h1></th>
+                    </tr>
+                    {props.authors.sort((auth,index) => (auth.name.toLowerCase() > index.name.toLowerCase()) ? 1 : -1).map((author, idx) => {
+                        return (
+                        <tr key={idx}>
+                            <td><Link to={`/${author._id}`}><h1>{author.name}</h1></Link></td>
+                            <td>
+                                <button onClick={(e) => navigate(`/${author._id}/edit`)}>Edit</button>
+                                <button authorId={author._id} successCallback={()=>removeFromDom(author._id)}/>
+                            </td>
+                        </tr>
+                        )
+                    })}
+                </tbody>
+            </table>
         </div>
-        
     )
 }
+
 export default AuthorList

@@ -1,29 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import AuthorForm from '../components/AuthorForm';
-import AuthorList from '../components/AuthorList';
+import React, {useState} from 'react';
 import axios from 'axios';
+import AuthorList from '../components/AuthorList';
+import {Link} from '@reach/router';
 
-
-const Main=(props)=> {
+const Main = (props) => {
     const [authors, setAuthors] = useState([]);
-    const [loaded, setLoaded] = useState(false);
-    useEffect(()=>{
-        axios.get('http://localhost:8000/api/authors')
-            .then(res=>{
-                setAuthors(res.data);
-                setLoaded(true);
-            });
-    },[])
-    const removeFromDom = authorId => {
-        setAuthors(authors.filter(author => author._id !== authorId));
-    }
-    return (
+
+    
+    axios.get('http://localhost:8000/api/authors')
+    .then(response => {
+        setAuthors(response.data);
+    },[props.id])
+
+    return(
         <div>
-           <AuthorForm/>
-           <hr/>
-            {loaded && <AuthorList authors={authors} removeFromDom={removeFromDom}/>}
-        
-        </div>   
+            <Link to={"/new"}>Add an Author</Link>
+            <h4>We have quotes by:</h4>
+            <AuthorList authors={authors} />
+        </div>
     )
 }
 
